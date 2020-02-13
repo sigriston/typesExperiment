@@ -68,50 +68,6 @@ describe('Employee', () => {
     });
   });
 
-  it('should produce a none option for an empty nickname', () => {
-    const data = {
-      id: 31337,
-      firstName: 'Fulano',
-      lastName: 'de Tal',
-    };
-
-    const employee = Employee.decode(data);
-
-    either.map(employee, e => {
-      expect(e.nickname).toEqual(none);
-    });
-  });
-
-  it('should produce a none option for an invalid nickname', () => {
-    const data = {
-      id: 31337,
-      firstName: 'Fulano',
-      lastName: 'de Tal',
-      nickname: 9875,
-    };
-
-    const employee = Employee.decode(data);
-
-    either.map(employee, e => {
-      expect(e.nickname).toEqual(none);
-    });
-  });
-
-  it('should produce a some option for a valid nickname', () => {
-    const data = {
-      id: 31337,
-      firstName: 'Fulano',
-      lastName: 'de Tal',
-      nickname: 'fool',
-    };
-
-    const employee = Employee.decode(data);
-
-    either.map(employee, e => {
-      expect(e.nickname).toEqual(some('fool'));
-    });
-  });
-
   it('should produce a undefined bossOf if absent', () => {
     const data = {
       id: 31337,

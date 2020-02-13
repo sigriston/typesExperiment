@@ -7,16 +7,14 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@types/jest": "^25.1.2",
-    "jest": "^25.1.0",
-    "ts-jest": "^25.2.0",
-    "typescript": "^3.7.5"
+    "@types/jest": "^22.2.3",
+    "jest": "^22.4.3",
+    "ts-jest": "^22.4.4",
+    "typescript": "~3.2.4"
   },
   "dependencies": {
-    "fp-ts": "^2.4.4",
-    "io-ts": "^2.1.0",
-    "io-ts-types": "^0.5.5",
-    "monocle-ts": "^2.1.0",
-    "newtype-ts": "^0.3.4"
+    "fp-ts": "^1.19.5",
+    "io-ts": "^1.10.4",
+    "io-ts-types": "^0.4.7"
   }
 }
