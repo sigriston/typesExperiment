@@ -1,4 +1,5 @@
-import { either, isRight } from 'fp-ts/lib/Either';
+import { either, isRight, right } from 'fp-ts/lib/Either';
+import { none, some } from 'fp-ts/lib/Option';
 import { PathReporter } from 'io-ts/lib/PathReporter';
 import { Employee } from '../Employee';
 
@@ -24,7 +25,19 @@ describe('Employee', () => {
     const employee = Employee.decode(data);
 
     expect(isRight(employee)).toBe(false);
-    console.log(PathReporter.report(employee));
+  });
+
+  it('should report a human-readable error', () => {
+    const data = {
+      id: 31337,
+      firstName: 'Fulano',
+    };
+
+    const employee = Employee.decode(data);
+
+    expect(PathReporter.report(employee).join('')).toEqual(
+      'Invalid value undefined supplied to : Employee/0: EmployeeBase/lastName: string'
+    );
   });
 
   it('should accept an unknown field', () => {
@@ -52,6 +65,79 @@ describe('Employee', () => {
 
     either.map(employee, e => {
       expect(e).toHaveProperty('xabl');
+    });
+  });
+
+  it('should produce a none option for an empty nickname', () => {
+    const data = {
+      id: 31337,
+      firstName: 'Fulano',
+      lastName: 'de Tal',
+    };
+
+    const employee = Employee.decode(data);
+
+    either.map(employee, e => {
+      expect(e.nickname).toEqual(none);
+    });
+  });
+
+  it('should produce a none option for an invalid nickname', () => {
+    const data = {
+      id: 31337,
+      firstName: 'Fulano',
+      lastName: 'de Tal',
+      nickname: 9875,
+    };
+
+    const employee = Employee.decode(data);
+
+    either.map(employee, e => {
+      expect(e.nickname).toEqual(none);
+    });
+  });
+
+  it('should produce a some option for a valid nickname', () => {
+    const data = {
+      id: 31337,
+      firstName: 'Fulano',
+      lastName: 'de Tal',
+      nickname: 'fool',
+    };
+
+    const employee = Employee.decode(data);
+
+    either.map(employee, e => {
+      expect(e.nickname).toEqual(some('fool'));
+    });
+  });
+
+  it('should produce a undefined bossOf if absent', () => {
+    const data = {
+      id: 31337,
+      firstName: 'Fulano',
+      lastName: 'de Tal',
+    };
+
+    const employee = Employee.decode(data);
+
+    either.map(employee, e => {
+      expect(e.bossOf).not.toBeDefined();
+    });
+  });
+
+  it('should produce a defined bossOf if present', () => {
+    const data = {
+      id: 31337,
+      firstName: 'Fulano',
+      lastName: 'de Tal',
+      bossOf: [ 23454, 98728, 547365 ],
+    };
+
+    const employee = Employee.decode(data);
+
+    either.map(employee, e => {
+      expect(e.bossOf).toEqual(data.bossOf);
     });
   });
 });
